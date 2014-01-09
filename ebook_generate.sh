@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Declare the supported formats
-declare -A BUILD=( ['epub']=0 ['docx']=0 )
+declare -A BUILD=( ['epub']=0 ['docx']=0 ['html']=0 )
 
 # Local book config
 source ebook_generate_config.sh
@@ -21,6 +21,9 @@ for i in "$@" ; do
 			;;
 		docx)
 			BUILD['docx']=1
+			;;
+		html)
+			BUILD['html']=1
 			;;
 		*)
 			echo "$i is not a valid format"
@@ -42,6 +45,13 @@ function generate {
 			;;
 		docx)
 			EXTRA_OPTS="--toc"
+			;;
+		html)
+			EXTRA_OPTS="
+			--toc
+			--standalone
+			--ascii
+			"
 			;;
 		*)
 			echo "$1 is not a valid format"
