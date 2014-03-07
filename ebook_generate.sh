@@ -59,7 +59,7 @@ function generate {
 			;;
 	esac
 
-	pandoc -S -r markdown -w $1 -o output.$1 $EXTRA_OPTS $CHAPTERS[0]
+	pandoc -S -r markdown -w $1 -o output.$1 $EXTRA_OPTS ${CHAPTERS[0]}
 }
 
 for format in "${!BUILD[@]}" ; do
