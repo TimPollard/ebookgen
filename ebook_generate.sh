@@ -1,36 +1,36 @@
 #!/usr/bin/env bash
 
-# Declare the supported formats
+# Declare the associative array of formats to build (0 means don't build, 1
+# means do build)
 declare -A BUILD=( ['epub']=0 ['docx']=0 ['html']=0 )
 
 # Local book config
 source ebook_generate_config.sh
 
-# Clear the default BUILD hash if something has been passed on the command line
-if [ $@ ] ; then
-	for format in "${!BUILD[@]}" ; do BUILD["$format"]=0 ; done
+if [ $@ ] ; then # Build whatever the user requested on the command line
+	for i in "$@" ; do
+		case $i in
+			all)
+				for format in "${!BUILD[@]}" ; do BUILD["$format"]=1 ; done
+				;;
+			epub)
+				BUILD['epub']=1
+				;;
+			docx)
+				BUILD['docx']=1
+				;;
+			html)
+				BUILD['html']=1
+				;;
+			*)
+				echo "$i is not a valid format"
+				exit 1
+				;;
+		esac
+	done
+else # Build the default formats from the config file
+	for format in ${FORMATS[0]} ; do BUILD["$format"]=1; done
 fi
-
-for i in "$@" ; do
-	case $i in
-		all)
-			for format in "${!BUILD[@]}" ; do BUILD["$format"]=1 ; done
-			;;
-		epub)
-			BUILD['epub']=1
-			;;
-		docx)
-			BUILD['docx']=1
-			;;
-		html)
-			BUILD['html']=1
-			;;
-		*)
-			echo "$i is not a valid format"
-			exit 1
-			;;
-	esac
-done
 
 function generate {
 	echo "Building $1"
@@ -38,9 +38,9 @@ function generate {
 	case $1 in
 		epub)
 			EXTRA_OPTS="
-			--epub-cover-image=${COVER_IMAGE}
-			--epub-metadata=${EPUB_META}
-			--epub-chapter-level=${EPUB_CHAPTER_DIV}
+			--epub-cover-image=${COVER_IMAGE[0]}
+			--epub-metadata=${EPUB_META[0]}
+			--epub-chapter-level=${EPUB_CHAPTER_DIV[0]}
 			"
 			;;
 		docx)
@@ -59,7 +59,7 @@ function generate {
 			;;
 	esac
 
-	pandoc -S -r markdown -w $1 -o output.$1 $EXTRA_OPTS $CHAPTERS
+	pandoc -S -r markdown -w $1 -o output.$1 $EXTRA_OPTS $CHAPTERS[0]
 }
 
 for format in "${!BUILD[@]}" ; do
