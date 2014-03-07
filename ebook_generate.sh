@@ -9,27 +9,26 @@ source ebook_generate_config.sh
 
 if [ $@ ] ; then # Build whatever the user requested on the command line
 	for i in "$@" ; do
-		case $i in
-			all)
-				for format in "${!BUILD[@]}" ; do BUILD["$format"]=1 ; done
-				;;
-			epub)
-				BUILD['epub']=1
-				;;
-			docx)
-				BUILD['docx']=1
-				;;
-			html)
-				BUILD['html']=1
-				;;
-			*)
+		if [ "$1" == "all" ]; then
+			for format in "${!BUILD[@]}" ; do BUILD["$format"]=1 ; done
+		else
+			if [ ${BUILD["$1"]} ]; then
+				BUILD["$1"]=1
+			else
 				echo "$i is not a valid format"
 				exit 1
-				;;
-		esac
+			fi
+		fi
 	done
 else # Build the default formats from the config file
-	for format in ${FORMATS[0]} ; do BUILD["$format"]=1; done
+	for format in ${FORMATS[0]} ; do
+		if [ ${BUILD["$format"]} ]; then
+			BUILD["$format"]=1
+		else
+			echo "$format [from the config file] is not a valid format"
+			exit 1
+		fi
+	done
 fi
 
 function generate {
