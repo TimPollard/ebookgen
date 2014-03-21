@@ -34,10 +34,12 @@ else # Build the default formats from the config file
 	done
 fi
 
+mkdir -p output/${NAME[0]}
+
 for format in "${!BUILD[@]}" ; do
 	if [ ${BUILD["$format"]} -ne 0 ] ; then
 		echo "Building $format"
 		${format}_extra
-		pandoc -S -r markdown -w $format -o output.$format $EXTRA_OPTS ${CHAPTERS[0]}
+		pandoc -S -r markdown -w $format -o output/${NAME[0]}/output.${format} $EXTRA_OPTS ${CHAPTERS[0]}
 	fi
 done
