@@ -10,5 +10,6 @@ function epub_extra {
 	--epub-cover-image=${COVER_IMAGE[0]}
 	--epub-metadata=${EPUB_META[0]}
 	--epub-chapter-level=${EPUB_CHAPTER_DIV[0]}
+	--template=$( dirname "$0" )/templates/epub.txt
 	"
 }
