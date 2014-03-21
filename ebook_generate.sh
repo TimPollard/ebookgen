@@ -1,5 +1,26 @@
 #!/usr/bin/env bash
 
+EDITION=""
+
+while getopts ":e:" opt; do
+	case $opt in
+		e)
+			echo "-e/edition was called with $OPTARG"
+			EDITION="$OPTARG"
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument." >&2
+			exit 1
+			;;
+	esac
+done
+
+shift $((OPTIND-1))
+
 # Declare the associative array of formats to build (0 means don't build, 1
 # means do build)
 declare -A BUILD
@@ -40,6 +61,6 @@ for format in "${!BUILD[@]}" ; do
 	if [ ${BUILD["$format"]} -ne 0 ] ; then
 		echo "Building $format"
 		${format}_extra
-		pandoc -S -r markdown -w $format -o output/${NAME[0]}/output.${format} $EXTRA_OPTS ${CHAPTERS[0]}
+		pandoc -S -r markdown -w $format -o output/${NAME[0]}/output.${format} -V "edition=$EDITION" $EXTRA_OPTS ${CHAPTERS[0]}
 	fi
 done
