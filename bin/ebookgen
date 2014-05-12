@@ -25,8 +25,11 @@ shift $((OPTIND-1))
 # means do build)
 declare -A BUILD
 
+# The lib (templates and format specific code)
+EBOOK_GEN_LIB_DIR="$( dirname "$0" )/../lib/ebookgen/"
+
 # Import the supported formats
-for file in $( dirname "$0" )/formats/*.sh ; do source $file ; done
+for file in $EBOOK_GEN_LIB_DIR/formats/*.sh ; do source $file ; done
 
 # Local book config
 source ebookgen_config.sh
@@ -61,6 +64,6 @@ for format in "${!BUILD[@]}" ; do
 	if [ ${BUILD["$format"]} -ne 0 ] ; then
 		echo "Building $format"
 		${format}_extra
-		pandoc -S -r markdown -w $format -o output/${NAME[0]}/output.${format} -V "edition=$EDITION" --data-dir="$( dirname "$0" )/data" $EXTRA_OPTS ${CHAPTERS[0]}
+		pandoc -S -r markdown -w $format -o output/${NAME[0]}/output.${format} -V "edition=$EDITION" --data-dir="$EBOOK_GEN_LIB_DIR/data" $EXTRA_OPTS ${CHAPTERS[0]}
 	fi
 done
