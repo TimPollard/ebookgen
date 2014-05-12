@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 
 EDITION=""
+CONFIG="ebookgen_config.sh"
 
-while getopts ":e:" opt; do
+while getopts ":e:c:" opt; do
 	case $opt in
 		e)
 			echo "-e/edition was called with $OPTARG"
 			EDITION="$OPTARG"
+			;;
+		c)
+			echo "-c/config was called with $OPTARG"
+			CONFIG="$OPTARG"
 			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
@@ -32,7 +37,7 @@ EBOOK_GEN_LIB_DIR="$( dirname "$0" )/../lib/ebookgen/"
 for file in $EBOOK_GEN_LIB_DIR/formats/*.sh ; do source $file ; done
 
 # Local book config
-source ebookgen_config.sh
+source $CONFIG
 
 if [ $@ ] ; then # Build whatever the user requested on the command line
 	for i in "$@" ; do
@@ -48,7 +53,7 @@ if [ $@ ] ; then # Build whatever the user requested on the command line
 		fi
 	done
 else # Build the default formats from the config file
-	for format in ${FORMATS[0]} ; do
+	for format in ${FORMATS} ; do
 		if [ ${BUILD["$format"]} ]; then
 			BUILD["$format"]=1
 		else
@@ -58,12 +63,12 @@ else # Build the default formats from the config file
 	done
 fi
 
-mkdir -p output/${NAME[0]}
+mkdir -p output/${NAME}
 
 for format in "${!BUILD[@]}" ; do
 	if [ ${BUILD["$format"]} -ne 0 ] ; then
 		echo "Building $format"
 		${format}_extra
-		pandoc -S -r markdown -w $format -o output/${NAME[0]}/output.${format} -V "edition=$EDITION" --data-dir="$EBOOK_GEN_LIB_DIR/data" $EXTRA_OPTS ${CHAPTERS[0]}
+		pandoc -S -r markdown -w $format -o output/${NAME}/output.${format} -V "edition=$EDITION" --data-dir="$EBOOK_GEN_LIB_DIR/data" $EXTRA_OPTS ${CHAPTERS}
 	fi
 done

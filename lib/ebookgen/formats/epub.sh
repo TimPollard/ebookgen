@@ -7,8 +7,8 @@ BUILD['epub']=0
 # options
 function epub_extra {
 	EXTRA_OPTS="
-	--epub-cover-image=${COVER_IMAGE[0]}
-	--epub-metadata=${EPUB_META[0]}
-	--epub-chapter-level=${EPUB_CHAPTER_DIV[0]}
+	--epub-cover-image=${COVER_IMAGE}
+	--epub-metadata=${EPUB_META}
+	--epub-chapter-level=${EPUB_CHAPTER_DIV}
 	"
 }
