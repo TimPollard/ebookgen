@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This is a template for the ebook_generate_config.sh file
+# This is a template for the ebookgen_config.sh file
 
 # The short name of the book (used by the script, and in filenames)
 NAME[0] = 'example'

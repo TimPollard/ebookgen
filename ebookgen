@@ -29,7 +29,7 @@ declare -A BUILD
 for file in $( dirname "$0" )/formats/*.sh ; do source $file ; done
 
 # Local book config
-source ebook_generate_config.sh
+source ebookgen_config.sh
 
 if [ $@ ] ; then # Build whatever the user requested on the command line
 	for i in "$@" ; do
