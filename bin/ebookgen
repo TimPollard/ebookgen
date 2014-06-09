@@ -39,6 +39,12 @@ for file in $EBOOK_GEN_LIB_DIR/formats/*.sh ; do source $file ; done
 # Local book config
 source $CONFIG
 
+STD_OPTS=''
+# Generate the standard options from what's set in the config file
+if [ "$NUMBER_SECTIONS" = true ] ; then
+	STD_OPTS="${STD_OPTS} --number-sections"
+fi
+
 if [ $@ ] ; then # Build whatever the user requested on the command line
 	for i in "$@" ; do
 		if [ "$1" == "all" ]; then
@@ -69,6 +75,6 @@ for format in "${!BUILD[@]}" ; do
 	if [ ${BUILD["$format"]} -ne 0 ] ; then
 		echo "Building $format"
 		${format}_extra
-		pandoc -S -r markdown -w $format -o output/${NAME}/output.${format} -V "edition=$EDITION" --data-dir="$EBOOK_GEN_LIB_DIR/data" $EXTRA_OPTS ${CHAPTERS}
+		pandoc -S -r markdown -w $format -o output/${NAME}/output.${format} -V "edition=$EDITION" --data-dir="$EBOOK_GEN_LIB_DIR/data" $STD_OPTS $EXTRA_OPTS ${CHAPTERS}
 	fi
 done

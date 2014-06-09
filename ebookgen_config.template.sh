@@ -23,3 +23,6 @@ EPUB_META="metadata.xml"
 
 # The chapter division level (for ePubs)
 EPUB_CHAPTER_DIV=1
+
+# Sections are numbered if this is set to true
+NUMBER_SECTIONS=false
