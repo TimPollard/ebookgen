@@ -75,6 +75,6 @@ for format in "${!BUILD[@]}" ; do
 	if [ ${BUILD["$format"]} -ne 0 ] ; then
 		echo "Building $format"
 		${format}_extra
-		pandoc -S -r markdown -w $format -o output/${NAME}/output.${format} -V "edition=$EDITION" --data-dir="$EBOOK_GEN_LIB_DIR/data" $STD_OPTS $EXTRA_OPTS ${CHAPTERS}
+		pandoc -S -r markdown -w $format -o output/${NAME}.${format} -V "edition=$EDITION" --data-dir="$EBOOK_GEN_LIB_DIR/data" $STD_OPTS $EXTRA_OPTS ${CHAPTERS}
 	fi
 done
