@@ -69,7 +69,7 @@ else # Build the default formats from the config file
 	done
 fi
 
-mkdir -p output/${NAME}
+mkdir output/
 
 for format in "${!BUILD[@]}" ; do
 	if [ ${BUILD["$format"]} -ne 0 ] ; then
